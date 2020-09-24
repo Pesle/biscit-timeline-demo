@@ -73,7 +73,7 @@ export class AppComponent  {
   }
 
   randomData(events: number, itemId: string, categoryId: string): TlData[]{
-    var dataArray: Array<TlData>;
+    var dataArray: Array<TlData> = [];
     for(var i = 0; i < events; i++){
       var dates = this.randomDates();
       var data: TlData = {
@@ -98,7 +98,7 @@ export class AppComponent  {
     var time2 = time1 + this.randomNumber(288);
     var today = new Date();
 
-    var dates: Array<Date>;
+    var dates: Array<Date> = [];
     dates.push(new Date(today.getTime()+(32-time1)*60*60*1000));
     dates.push(new Date(today.getTime()+time1*60*60*1000));
     return dates;
