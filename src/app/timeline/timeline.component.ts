@@ -61,7 +61,7 @@ export class TimelineComponent implements AfterViewInit {
 
 //LIST FUNCTIONS
 	//--Check if to display category or hide
-	protected async categoryClicked(category: TlCategory){
+	async categoryClicked(category: TlCategory){
 		
 		this.CategoryClicked.emit(category);
 		
@@ -80,7 +80,7 @@ export class TimelineComponent implements AfterViewInit {
 	}
 	
 	//--Return string with number of tabs
-	protected tabs(tab: number) : String{
+	tabs(tab: number) : String{
 		var output = String();
 		for(var i = 0; i < tab; i++){
 			output += "– ";
@@ -88,7 +88,7 @@ export class TimelineComponent implements AfterViewInit {
 		return output;
 	}
 	
-	protected checkDates(start: Date, end: Date): Boolean{
+	checkDates(start: Date, end: Date): Boolean{
 		//Check if dates are in date range
 		if(end.getTime() >= this.startDate.getTime() && start.getTime() <= this.endDate().getTime()){
 			return true;
@@ -96,12 +96,12 @@ export class TimelineComponent implements AfterViewInit {
 		return false;
 	}
 	
-	protected changeStartDate(moveBy: number){
+	changeStartDate(moveBy: number){
 		this.startDate = new Date(this.startDate.getTime() + 1000 * 60 * 60 * moveBy);
 		this.StartDateChanged.emit(this.startDate);
 	}
 	
-	protected changeStartDateOne(forward: boolean){
+	changeStartDateOne(forward: boolean){
 		var moveBy: number;
 		switch(this.scale){
 			case TlScale.Hours:
@@ -118,7 +118,7 @@ export class TimelineComponent implements AfterViewInit {
 		this.StartDateChanged.emit(this.startDate);
 	}
 	
-	protected categoryBarClicked(category: TlCategory, event: MouseEvent){
+	categoryBarClicked(category: TlCategory, event: MouseEvent){
 		var newData = {
 			startTime: this.getDateFromPosition(event.offsetX),
 			endTime: null,
@@ -130,7 +130,7 @@ export class TimelineComponent implements AfterViewInit {
 		this.BarClicked.emit(newData);
 	}
 	
-	protected itemBarClicked(item: TlItem, event: MouseEvent){
+	itemBarClicked(item: TlItem, event: MouseEvent){
 		var newData = {
 			startTime: this.getDateFromPosition(event.offsetX),
 			endTime: null,
@@ -174,7 +174,7 @@ export class TimelineComponent implements AfterViewInit {
 //TIMEFRAME FUNCTIONS
 	
 	//Returns the width of the frames for displaying in the timeline
-	protected getPeriods(): Array<Date>{
+	getPeriods(): Array<Date>{
 		var output = Array<Date>();
 		
 		
@@ -201,7 +201,7 @@ export class TimelineComponent implements AfterViewInit {
 	}
 	
 	//Returns the width of the frames for displaying in the timeline
-	protected getGraphStyle(start: Date, end: Date, dataType: TlDataType, offset: number): Object{
+	getGraphStyle(start: Date, end: Date, dataType: TlDataType, offset: number): Object{
 
 		//Get width of timeframe
 		var tlWidth: number = this.tlTimeframe.nativeElement.offsetWidth;
@@ -265,7 +265,7 @@ export class TimelineComponent implements AfterViewInit {
 	}
 
 	//Returns the position of frames for the periods display
-	protected getPeriodStyle(start: Date): Object{
+	getPeriodStyle(start: Date): Object{
 		if(this.tlTimeframe !== undefined){
 			var endDate: Date;
 			switch(this.scale){
@@ -307,13 +307,13 @@ export class TimelineComponent implements AfterViewInit {
 	}
 	
 	//--If the category is currently being displayed
-	protected isDisplayed(id: string) : boolean{
+	isDisplayed(id: string) : boolean{
 		if(id==undefined)
 			return true;
 		return this.findCategory(id, this.categoryTree).displayed;
 	}
 	
-	protected endDate(): Date{
+	endDate(): Date{
 		var multiple: number = 1;
 		if(this.scale == TlScale.Days){
 			multiple = 24;

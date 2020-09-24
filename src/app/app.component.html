@@ -1,4 +1,7 @@
-<app-timeline></app-timeline>
-<p>
-  Start editing to see some magic happen :)
-</p>
+<app-timeline
+    [startDate]="startDate"
+    [period]="7" 
+    [scale]="scale" 
+    [dataSource]="categoryTree">>
+
+</app-timeline>

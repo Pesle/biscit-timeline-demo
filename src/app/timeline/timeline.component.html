@@ -1,4 +1,7 @@
 <!-- Main -->
+<div *ngIf="categoryTree==undefined">
+  No DataSource
+</div>
 <div *ngIf="categoryTree!==undefined">
 
 	<div class="tl">
@@ -30,9 +33,9 @@
 		  	</ng-container>
 		  	
 		  	<div class="tl-bottom">
-		  		<span class="tl-back" (click)="changeStartDateOne(false)"><fa-icon [icon]="faChevronLeft"></fa-icon></span>
+		  		<span class="tl-back" (click)="changeStartDateOne(false)">{{faChevronLeft}}</span>
 		  		<ng-container *ngTemplateOutlet="displayPeriods"></ng-container>
-		  		<span class="tl-next" (click)="changeStartDateOne(true)"><fa-icon [icon]="faChevronRight"></fa-icon></span>
+		  		<span class="tl-next" (click)="changeStartDateOne(true)">{{faChevronRight}}</span>
 		  	</div>
 		  </div>
 		</div>
@@ -84,10 +87,10 @@
 <!-- Arrow for identifying open and closed categories -->
 <ng-template #listArrow let-id="id">
   <ng-container *ngIf="isDisplayed(id); else closed">
-    <fa-icon [icon]="faChevronDown"></fa-icon>
+    {{faChevronDown}}>
   </ng-container>
   <ng-template #closed>
-	<fa-icon [icon]="faChevronUp"></fa-icon>
+	{{faChevronUp}}>
   </ng-template>
 </ng-template>
 
@@ -97,7 +100,7 @@
 <!-- Display Sub Category - Recursive -->
 <ng-template #recursiveTimelineTemplate let-list="list">
   <ng-container *ngFor="let cat of list">
-  	<div class="tl-line" on-click="categoryLineClicked(cat, $event)">
+  	<div class="tl-line" on-click="categoryBarClicked(cat, $event)">
 		
 	</div>
 	
@@ -119,10 +122,10 @@
 <ng-template #displayTimelineItems let-list="list">
 	<ng-container *ngIf="list.length > 0">
 	  <ng-container *ngFor="let item of list; last as isLast">
-        <div #elem [attr.id]="'tl-'+item.itemsId" class="tl-line" on-click="itemLineClicked(item, $event)" [ngClass]="{'tl-categoryDivide': isLast, 'tl-itemDisabled': item.disabled}" >
+        <div #elem [attr.id]="'tl-'+item.itemsId" class="tl-line" on-click="itemBarClicked(item, $event)" [ngClass]="{'tl-categoryDivide': isLast, 'tl-itemDisabled': item.disabled}" >
 			<ng-container *ngFor="let curData of item.data">
 				<ng-container *ngIf="checkDates(curData.startTime, curData.endTime)">
-					<span class="tl-graph-data" (click)="DataClicked.emit(curData)" [ngStyle]="getGraphStyle(curData.startTime, curData.endTime, curData.type, -6)">
+					<span class="tl-graph-data" (click)="EmptyBarClicked.emit(curData)" [ngStyle]="getGraphStyle(curData.startTime, curData.endTime, curData.type, -6)">
 						<ng-container *ngIf="curData.startTime.getTime() < startDate.getTime(); else StartInFrame">
 							<span class="tl-graph-time" style="float:left;">< {{curData.startTime | date: 'd LLL, hh:mm a'}}</span>
 						</ng-container>
@@ -148,16 +151,16 @@
 <ng-template #displayScale>
 	<!-- Hours -->
    	<span class="tl-scale" *ngIf="scale == 'Hours'">
-      	<span (click)="changeStartDate(-period)"><fa-icon [icon]="faChevronLeft"></fa-icon></span>
+      	<span (click)="changeStartDate(-period)">{{faChevronLeft}}</span>
       	{{ startDate | date:'d LLL'}}
-      	<span (click)="changeStartDate(period)"><fa-icon [icon]="faChevronRight"></fa-icon></span>
+      	<span (click)="changeStartDate(period)">{{faChevronRight}}</span>
     </span>
 	
 	<!-- Days -->
    	<span class="tl-scale" *ngIf="scale == 'Days'">
-      	<span (click)="changeStartDate(24 * -period)"><fa-icon [icon]="faChevronLeft"></fa-icon></span>
+      	<span (click)="changeStartDate(24 * -period)">{{faChevronLeft}}</span>
       	{{ startDate | date:'d LLL'}} - {{ endDate() | date:'d LLL'}}
-      	<span (click)="changeStartDate(24 * period)"><fa-icon [icon]="faChevronRight"></fa-icon></span>
+      	<span (click)="changeStartDate(24 * period)">{{faChevronRight}}</span>
     </span>
     
 </ng-template>
