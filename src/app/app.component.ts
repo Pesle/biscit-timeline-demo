@@ -1,4 +1,6 @@
-import { Component, VERSION } from '@angular/core';
+import {Component} from '@angular/core';
+
+//import { TlCategory, TlData, TlItem, TlDataType, TlScale } from './timeline/timeline.component';
 
 @Component({
   selector: 'my-app',
