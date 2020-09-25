@@ -81,7 +81,7 @@ export class AppComponent  {
     //Start random data dates at 72 hours before startDate
     var nextDate: Date = new Date(this.startDate.getTime() - 72 * 60 * 60 * 1000);
     for(var i = 0; i < events; i++){
-      nextDate.setHours(nextDate.getHours() + Math.round(nextDate.getMinutes()/60));
+      nextDate.setHours(nextDate.getHours() + Math.round(nextDate.getMinutes()/60)+1);
       nextDate.setMinutes(0, 0, 0);
 		
       var dates = this.randomDates(nextDate);
