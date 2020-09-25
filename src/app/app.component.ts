@@ -8,11 +8,11 @@ import { TlCategory, TlData, TlItem, TlDataType, TlScale } from './timeline/time
   styleUrls: [ './app.component.css' ]
 })
 export class AppComponent  {
-  dataIdInc: number;
-  startDate: Date;
-  scale: TlScale;
+  dataIdInc: number = 0;
+  public startDate: Date;
+  public scale: TlScale;
 
-  categoryTree: TlCategory;
+  public categoryTree: TlCategory;
 
   dataTypes: Array<TlDataType>;
 
@@ -38,7 +38,7 @@ export class AppComponent  {
           items: [{
             name: "Lounge Room",
             itemId: "1",
-            data: this.randomData(10, "1", ""),
+            data: this.randomData(5, "1", ""),
             disabled: false,
             available: true
           },{
@@ -58,7 +58,7 @@ export class AppComponent  {
           items: [{
             name: "Whiteboard",
             itemId: "3",
-            data: this.randomData(10, "3", ""),
+            data: this.randomData(5, "3", ""),
             disabled: false,
             available: true
           }],
@@ -74,8 +74,10 @@ export class AppComponent  {
 
   randomData(events: number, itemId: string, categoryId: string): TlData[]{
     var dataArray: Array<TlData> = [];
+    //Start random data dates at 72 hours before startDate
+    var nextDate: Date = new Date(this.startDate.getTime() - 72 * 60 * 60 * 1000);
     for(var i = 0; i < events; i++){
-      var dates = this.randomDates();
+      var dates = this.randomDates(nextDate);
       var data: TlData = {
         startTime: dates[0],
         endTime: dates[1],
@@ -84,23 +86,30 @@ export class AppComponent  {
         itemId: itemId,
         type: this.randomDataType()
       }
+      //Update nextDate to previous finish date
+      nextDate = dates[1];
+      this.dataIdInc++;
       dataArray.push(data);
     }
     return dataArray;
   }
 
   randomDataType(): TlDataType{
-    return this.dataTypes[this.randomNumber(2)-1];
+    if(this.randomNumber(10) > 5)
+      return this.dataTypes[1];
+    return this.dataTypes[0];
   }
 
-  randomDates(): Date[]{
-    var time1 = this.randomNumber(144);
-    var time2 = time1 + this.randomNumber(288);
-    var today = new Date();
+  randomDates(previousDate: Date): Date[]{
+    //Generate random hours
+    var time1 = this.randomNumber(72);
+    var time2 = this.randomNumber(72)+12;
 
     var dates: Array<Date> = [];
-    dates.push(new Date(today.getTime()+(32-time1)*60*60*1000));
-    dates.push(new Date(today.getTime()+time1*60*60*1000));
+    //Add random hours to previous date
+    dates.push(new Date(previousDate.getTime()+time1*60*60*1000));
+    //Add random hours to start date
+    dates.push(new Date(dates[0].getTime()+time2*60*60*1000));
     return dates;
   }
 

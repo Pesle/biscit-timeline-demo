@@ -22,8 +22,9 @@ export class TimelineComponent implements AfterViewInit {
 	@Input('period') period: number;
 	@Input('scale') scale: TlScale;
 	
+  //TWO WAY BINDING OUTPUTS
 	//Returns date if changed by timeline
-	@Output() StartDateChanged = new EventEmitter<Date>();
+	@Output() startDateChange = new EventEmitter();
 	
 	//Returns category if clicked, displayed or hidden.
 	@Output() CategoryClicked = new EventEmitter<TlCategory>();
@@ -98,7 +99,7 @@ export class TimelineComponent implements AfterViewInit {
 	
 	changeStartDate(moveBy: number){
 		this.startDate = new Date(this.startDate.getTime() + 1000 * 60 * 60 * moveBy);
-		this.StartDateChanged.emit(this.startDate);
+		this.startDateChange.next(this.startDate);
 	}
 	
 	changeStartDateOne(forward: boolean){
@@ -115,7 +116,7 @@ export class TimelineComponent implements AfterViewInit {
 			moveBy = -moveBy;
 		}
 		this.startDate = new Date(this.startDate.getTime() + 1000 * 60 * 60 * moveBy);
-		this.StartDateChanged.emit(this.startDate);
+		this.startDateChange.next(this.startDate);
 	}
 	
 	categoryBarClicked(category: TlCategory, event: MouseEvent){

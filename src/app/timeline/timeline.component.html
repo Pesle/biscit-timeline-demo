@@ -87,10 +87,10 @@
 <!-- Arrow for identifying open and closed categories -->
 <ng-template #listArrow let-id="id">
   <ng-container *ngIf="isDisplayed(id); else closed">
-    {{faChevronDown}}>
+    {{faChevronDown}}
   </ng-container>
   <ng-template #closed>
-	{{faChevronUp}}>
+	{{faChevronUp}}
   </ng-template>
 </ng-template>
 
@@ -167,7 +167,7 @@
 
 <!--  Display Periods depending on Scale -->
 <ng-template #displayPeriods>
-	<ng-container *ngIf="getPeriods().length > 0">
+	<span class="tl-periods" *ngIf="getPeriods().length > 0">
 	  <ng-container *ngFor="let curPeriod of getPeriods(); let i = index;">
 	        <!-- Hours -->
 	        <span class="tl-period" [ngStyle]="getPeriodStyle(curPeriod)" *ngIf="scale == 'Hours'" [ngClass]="{'tl-period-m': (curPeriod.getHours() == 12 || curPeriod.getHours() == 9 || curPeriod.getHours() == 17)}">
@@ -180,5 +180,5 @@
 	        	{{ curPeriod | date:'dd' }} - {{ curPeriod | date:'EEE' }} 
 	        </span>
 	  </ng-container>
-    </ng-container>
+  </span>
 </ng-template>

@@ -4,7 +4,7 @@ a {
 	color: #4d4d4d;
 }
 
-fa-icon {
+.fa-icon {
 	font-size:8px;
 }
 
@@ -127,8 +127,16 @@ fa-icon {
 	padding:12px 0px;
 }
 
-.tl-scale fa-icon{
-	margin:0px 15px;
+.tl-scale span:first-child{
+	position: absolute;
+  left:10px;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+.tl-scale span:last-child{
+	position: absolute;
+  right:10px;
 	font-size: 20px;
 	cursor: pointer;
 }
@@ -165,12 +173,12 @@ fa-icon {
 	font-weight: bold;
 }
 
-.tl-period-m:not(:first-child){
+.tl-periods .tl-period-m:not(:first-child){
 	border-left: 3px solid #ccc;
 	margin-left: -3px;
 }
 
-.tl-period:first-child{
+.tl-periods .tl-period:first-child{
 	border-left: 0px;
 	margin-left: 0px;
 }
@@ -193,7 +201,7 @@ fa-icon {
 	color:#000;
 }
 
-.tl-next fa-icon{
+.tl-next{
 	position: absolute;
 	right:10px;
 	top: 22px;
@@ -201,7 +209,7 @@ fa-icon {
 	cursor: pointer;
 }
 
-.tl-back fa-icon{
+.tl-back{
 	position: absolute;
 	left:10px;
 	top: 22px;
