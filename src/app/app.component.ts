@@ -81,6 +81,9 @@ export class AppComponent  {
     //Start random data dates at 72 hours before startDate
     var nextDate: Date = new Date(this.startDate.getTime() - 72 * 60 * 60 * 1000);
     for(var i = 0; i < events; i++){
+      nextDate.setHours(nextDate.getHours() + Math.round(nextDate.getMinutes()/60));
+      nextDate.setMinutes(0, 0, 0);
+		
       var dates = this.randomDates(nextDate);
       var data: TlData = {
         startTime: dates[0],
@@ -107,7 +110,7 @@ export class AppComponent  {
   randomDates(previousDate: Date): Date[]{
     //Generate random hours
     var time1 = this.randomNumber(72);
-    var time2 = this.randomNumber(72)+12;
+    var time2 = this.randomNumber(80)+12;
 
     var dates: Array<Date> = [];
     //Add random hours to previous date

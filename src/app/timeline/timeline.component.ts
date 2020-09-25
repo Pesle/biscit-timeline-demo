@@ -113,7 +113,7 @@ export class TimelineComponent implements AfterViewInit {
 	
 	roundDate(date: Date): Date{
 		date.setHours(0);
-    	date.setMinutes(0, 0, 0);
+    date.setMinutes(0, 0, 0);
 		return date;
 	}
 	
