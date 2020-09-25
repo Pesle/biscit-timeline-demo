@@ -2,5 +2,6 @@
     [(startDate)] = "startDate"
     [period] = "5"
     [scale] = "scale"
-    [dataSource] = "categoryTree">
+    [dataSource] = "categoryTree"
+    (BarClicked) = "messageBox($event.startTime+'\nTO\n'+$event.endTime+'\n \nData Type: '+$event.type.name+'\nData ID: '+$event.dataId)">
 </app-timeline>

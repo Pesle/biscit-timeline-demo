@@ -125,7 +125,7 @@
         <div #elem [attr.id]="'tl-'+item.itemsId" class="tl-line" on-click="itemBarClicked(item, $event)" [ngClass]="{'tl-categoryDivide': isLast, 'tl-itemDisabled': item.disabled}" >
 			<ng-container *ngFor="let curData of item.data">
 				<ng-container *ngIf="checkDates(curData.startTime, curData.endTime)">
-					<span class="tl-graph-data" (click)="EmptyBarClicked.emit(curData)" [ngStyle]="getGraphStyle(curData.startTime, curData.endTime, curData.type, -6)">
+					<span class="tl-graph-data" (click)="BarClicked.emit(curData)" [ngStyle]="getGraphStyle(curData.startTime, curData.endTime, curData.type, -6)">
 						<ng-container *ngIf="curData.startTime.getTime() < startDate.getTime(); else StartInFrame">
 							<span class="tl-graph-time" style="float:left;">< {{curData.startTime | date: 'd LLL, hh:mm a'}}</span>
 						</ng-container>

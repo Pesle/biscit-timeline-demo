@@ -48,7 +48,7 @@ export class AppComponent  {
             disabled: false,
             available: true
           }],
-          data: [],
+          data: this.randomData(1, "", "1"),
           displayed: false
         },{
           name: "Equipment",
@@ -70,6 +70,10 @@ export class AppComponent  {
       data: [],
       displayed: true
     }
+  }
+
+  messageBox(str: string){
+    alert(str);
   }
 
   randomData(events: number, itemId: string, categoryId: string): TlData[]{

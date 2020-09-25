@@ -17,12 +17,21 @@ export class TimelineComponent implements AfterViewInit {
 	
 	event: MouseEvent;
 	
-	@Input('startDate') startDate: Date;
+	_startDate: Date;
+	
+	@Input('startDate') set startDate(value: Date) {
+       this._startDate = this.roundDate(value);
+    }
+    
+    get startDate(): Date {
+        return this._startDate;
+    }
+	
 	@Input('dataSource') categoryTree: TlCategory;
 	@Input('period') period: number;
 	@Input('scale') scale: TlScale;
 	
-  //TWO WAY BINDING OUTPUTS
+  	//TWO WAY BINDING OUTPUTS
 	//Returns date if changed by timeline
 	@Output() startDateChange = new EventEmitter();
 	
@@ -43,9 +52,9 @@ export class TimelineComponent implements AfterViewInit {
 	constructor() {
 		
 		//If startDate not set, set to today
-		if(this.startDate == undefined)
-			this.startDate = new Date();
-		
+		if(this._startDate == undefined)
+			this._startDate = this.roundDate(new Date());
+				
 		//If Period not set, set to 7
 		if(this.period == undefined)
 			this.period = 7;
@@ -91,15 +100,21 @@ export class TimelineComponent implements AfterViewInit {
 	
 	checkDates(start: Date, end: Date): Boolean{
 		//Check if dates are in date range
-		if(end.getTime() >= this.startDate.getTime() && start.getTime() <= this.endDate().getTime()){
+		if(end.getTime() >= this._startDate.getTime() && start.getTime() <= this.endDate().getTime()){
 			return true;
 		}
 		return false;
 	}
 	
 	changeStartDate(moveBy: number){
-		this.startDate = new Date(this.startDate.getTime() + 1000 * 60 * 60 * moveBy);
-		this.startDateChange.next(this.startDate);
+		this._startDate = this.roundDate(new Date(this._startDate.getTime() + 1000 * 60 * 60 * moveBy));
+		this.startDateChange.next(this._startDate);
+	}
+	
+	roundDate(date: Date): Date{
+		date.setHours(0);
+    	date.setMinutes(0, 0, 0);
+		return date;
 	}
 	
 	changeStartDateOne(forward: boolean){
@@ -115,8 +130,8 @@ export class TimelineComponent implements AfterViewInit {
 		if(!forward){
 			moveBy = -moveBy;
 		}
-		this.startDate = new Date(this.startDate.getTime() + 1000 * 60 * 60 * moveBy);
-		this.startDateChange.next(this.startDate);
+		this._startDate = this.roundDate(new Date(this._startDate.getTime() + 1000 * 60 * 60 * moveBy));
+		this.startDateChange.next(this._startDate);
 	}
 	
 	categoryBarClicked(category: TlCategory, event: MouseEvent){
@@ -128,7 +143,7 @@ export class TimelineComponent implements AfterViewInit {
 			itemId: null,
 			type: null
 		}
-		this.BarClicked.emit(newData);
+		this.EmptyBarClicked.emit(newData);
 	}
 	
 	itemBarClicked(item: TlItem, event: MouseEvent){
@@ -140,7 +155,7 @@ export class TimelineComponent implements AfterViewInit {
 			itemId: item.itemId,
 			type: null
 		}
-		this.BarClicked.emit(newData);
+		this.EmptyBarClicked.emit(newData);
 	}
 	
 	private getDateFromPosition(offset: number): Date{
@@ -154,7 +169,7 @@ export class TimelineComponent implements AfterViewInit {
 				//Divide width by minutes
 			 	widthToPeriod = tlWidth / (this.period * 60);
 				//Convert Startdate to minutes, times by (Mouse position / width To Minutes) then convert back to millis
-				newStartDate = new Date((Math.round(this.startDate.getTime() / 1000 / 60) + (offset / widthToPeriod)) * 1000 * 60);
+				newStartDate = new Date((Math.round(this._startDate.getTime() / 1000 / 60) + (offset / widthToPeriod)) * 1000 * 60);
 				//Round to Minutes
 				newStartDate.setMinutes(0);
 				break;
@@ -163,7 +178,7 @@ export class TimelineComponent implements AfterViewInit {
 				//Divide width by hours
 			 	widthToPeriod = tlWidth / (this.period * 24);
 				//Convert Startdate to hours, times by (Mouse position / width To Hours) then convert back to millis
-				newStartDate = new Date((Math.round(this.startDate.getTime() / 1000 / 60 / 60) + (offset / widthToPeriod)) * 1000 * 60 * 60);
+				newStartDate = new Date((Math.round(this._startDate.getTime() / 1000 / 60 / 60) + (offset / widthToPeriod)) * 1000 * 60 * 60);
 				//Round to Hours
 				newStartDate.setMinutes(0);
 				newStartDate.setSeconds(0);
@@ -195,7 +210,7 @@ export class TimelineComponent implements AfterViewInit {
 					multiply = multiply * 24 * 7 * i;// 1 Hour * 24 Hours * 7 days * I = 1 week
 					break;
 			}
-			output.push(new Date(this.startDate.getTime() + multiply));
+			output.push(new Date(this._startDate.getTime() + multiply));
 		}
 		return output;
 		
@@ -223,7 +238,7 @@ export class TimelineComponent implements AfterViewInit {
 			 	widthToPeriod = tlWidth / (this.period * 60);
 			
 				//Convert times to minutes
-				startDateToPeriod = Math.round(this.startDate.getTime() / 1000 / 60);
+				startDateToPeriod = Math.round(this._startDate.getTime() / 1000 / 60);
 				endDateToPeriod = Math.round(this.endDate().getTime() / 1000 / 60);
 			 	startToPeriod = Math.round(start.getTime() / 1000 / 60);
 				endToPeriod= Math.round(end.getTime() / 1000 / 60);
@@ -234,7 +249,7 @@ export class TimelineComponent implements AfterViewInit {
 			 	widthToPeriod = tlWidth / (this.period*24);
 			
 				//Convert times to hours	
-				startDateToPeriod = Math.round(this.startDate.getTime() / 1000 / 60 / 60);
+				startDateToPeriod = Math.round(this._startDate.getTime() / 1000 / 60 / 60);
 				endDateToPeriod = Math.round(this.endDate().getTime() / 1000 / 60 / 60);
 			 	startToPeriod = Math.round(start.getTime() / 1000 / 60 / 60);
 				endToPeriod = Math.round(end.getTime() / 1000 / 60 / 60);
@@ -319,7 +334,7 @@ export class TimelineComponent implements AfterViewInit {
 		if(this.scale == TlScale.Days){
 			multiple = 24;
 		}
-		return new Date((this.startDate.getTime() + 1000 * 60 * 60 * multiple * this.period)-1);
+		return new Date((this._startDate.getTime() + 1000 * 60 * 60 * multiple * this.period)-1);
 	}
 
 
