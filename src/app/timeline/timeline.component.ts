@@ -15,6 +15,8 @@ export class TimelineComponent implements AfterViewInit {
 	
 	IsError: boolean;
 	
+	ready: Promise<boolean>;
+	
 	event: MouseEvent;
 	
 	_startDate: Date;
@@ -47,7 +49,7 @@ export class TimelineComponent implements AfterViewInit {
 	@Output() BarChanged = new EventEmitter<TlData>();
 	@Output() BarClicked = new EventEmitter<TlData>();
 	
-	@ViewChild('tlTimeframe', { static: false }) public tlTimeframe: ElementRef;
+	@ViewChild('tlTimeframe', {static: false}) private tlTimeframe: any;
 
 	constructor() {
 		
@@ -66,6 +68,8 @@ export class TimelineComponent implements AfterViewInit {
 	}
 	
 	ngAfterViewInit() {
+		this.ready = Promise.resolve(true);
+    console.log(this.tlTimeframe.nativeElement.offsetWidth);
 	}
 	
 
@@ -98,6 +102,7 @@ export class TimelineComponent implements AfterViewInit {
 		return output;
 	}
 	
+	//--Check if the inputted date rate is inside the timelines range
 	checkDates(start: Date, end: Date): Boolean{
 		//Check if dates are in date range
 		if(end.getTime() >= this._startDate.getTime() && start.getTime() <= this.endDate().getTime()){
@@ -106,17 +111,20 @@ export class TimelineComponent implements AfterViewInit {
 		return false;
 	}
 	
+	//--Move the start date by a select number
 	changeStartDate(moveBy: number){
 		this._startDate = this.roundDate(new Date(this._startDate.getTime() + 1000 * 60 * 60 * moveBy));
 		this.startDateChange.next(this._startDate);
 	}
 	
+	//--Round date to start of the day
 	roundDate(date: Date): Date{
 		date.setHours(0);
-    date.setMinutes(0, 0, 0);
+    	date.setMinutes(0, 0, 0);
 		return date;
 	}
 	
+	//--Move the start date by one position
 	changeStartDateOne(forward: boolean){
 		var moveBy: number;
 		switch(this.scale){
@@ -134,6 +142,7 @@ export class TimelineComponent implements AfterViewInit {
 		this.startDateChange.next(this._startDate);
 	}
 	
+	//Return information about 
 	categoryBarClicked(category: TlCategory, event: MouseEvent){
 		var newData = {
 			startTime: this.getDateFromPosition(event.offsetX),
@@ -143,6 +152,7 @@ export class TimelineComponent implements AfterViewInit {
 			itemId: null,
 			type: null
 		}
+		event.stopPropagation();
 		this.EmptyBarClicked.emit(newData);
 	}
 	
@@ -155,6 +165,7 @@ export class TimelineComponent implements AfterViewInit {
 			itemId: item.itemId,
 			type: null
 		}
+		event.stopPropagation();
 		this.EmptyBarClicked.emit(newData);
 	}
 	
@@ -219,65 +230,70 @@ export class TimelineComponent implements AfterViewInit {
 	//Returns the width of the frames for displaying in the timeline
 	getGraphStyle(start: Date, end: Date, dataType: TlDataType, offset: number): Object{
 
-		//Get width of timeframe
-		var tlWidth: number = this.tlTimeframe.nativeElement.offsetWidth;
-		
-		var widthToPeriod: number;
-		
-		var startDateToPeriod: number;
-		var endDateToPeriod: number;
-		var startToPeriod: number;
-		var endToPeriod: number;
-		
-		var _left: number;
-		var _width: number = 100;
-		
-		switch(this.scale){
-			case TlScale.Hours:
-				//Divide width by minutes
-			 	widthToPeriod = tlWidth / (this.period * 60);
-			
-				//Convert times to minutes
-				startDateToPeriod = Math.round(this._startDate.getTime() / 1000 / 60);
-				endDateToPeriod = Math.round(this.endDate().getTime() / 1000 / 60);
-			 	startToPeriod = Math.round(start.getTime() / 1000 / 60);
-				endToPeriod= Math.round(end.getTime() / 1000 / 60);
-				break;
-				
-			case TlScale.Days:
-				//Divide width by hours
-			 	widthToPeriod = tlWidth / (this.period*24);
-			
-				//Convert times to hours	
-				startDateToPeriod = Math.round(this._startDate.getTime() / 1000 / 60 / 60);
-				endDateToPeriod = Math.round(this.endDate().getTime() / 1000 / 60 / 60);
-			 	startToPeriod = Math.round(start.getTime() / 1000 / 60 / 60);
-				endToPeriod = Math.round(end.getTime() / 1000 / 60 / 60);
-				break;
-		}
-		
-		
-		//CALCULATE LEFT
-		//If off timeline, start at startDate
-		if(startToPeriod < startDateToPeriod){
-			startToPeriod = startDateToPeriod;
-		}
-		//Difference between startDate and booking start times width to time ratio
-		var _left = (startToPeriod - startDateToPeriod) * widthToPeriod;
-		
-		//CALCULATE WIDTH
-		//If off timeline, start at startDate
-		if(endToPeriod > endDateToPeriod){
-			endToPeriod = endDateToPeriod;
-		}
-		//Difference between end and start times width to time ratio plus offset
-		var _width = ((endToPeriod - startToPeriod) * widthToPeriod) + offset;
-		
-		let style: Object;		
-		style = {'margin-left.px': _left, 'width.px': _width};
-		if(dataType !== null)
-			style = {'margin-left.px': _left, 'width.px': _width, 'background-color': dataType.mainColor, 'border-color': dataType.secondColor};	
-		return style;
+    // Wait for the page to be ready before displaying bars
+    if(this.ready){
+      //Get width of timeframe
+      var tlWidth: number = this.tlTimeframe.nativeElement.offsetWidth;
+      
+      
+      var widthToPeriod: number;
+      
+      var startDateToPeriod: number;
+      var endDateToPeriod: number;
+      var startToPeriod: number;
+      var endToPeriod: number;
+      
+      var _left: number;
+      var _width: number = 100;
+      
+      switch(this.scale){
+        case TlScale.Hours:
+          //Divide width by minutes
+          widthToPeriod = tlWidth / (this.period * 60);
+        
+          //Convert times to minutes
+          startDateToPeriod = Math.round(this._startDate.getTime() / 1000 / 60);
+          endDateToPeriod = Math.round(this.endDate().getTime() / 1000 / 60);
+          startToPeriod = Math.round(start.getTime() / 1000 / 60);
+          endToPeriod= Math.round(end.getTime() / 1000 / 60);
+          break;
+          
+        case TlScale.Days:
+          //Divide width by hours
+          widthToPeriod = tlWidth / (this.period*24);
+        
+          //Convert times to hours	
+          startDateToPeriod = Math.round(this._startDate.getTime() / 1000 / 60 / 60);
+          endDateToPeriod = Math.round(this.endDate().getTime() / 1000 / 60 / 60);
+          startToPeriod = Math.round(start.getTime() / 1000 / 60 / 60);
+          endToPeriod = Math.round(end.getTime() / 1000 / 60 / 60);
+          break;
+      }
+      
+      
+      //CALCULATE LEFT
+      //If off timeline, start at startDate
+      if(startToPeriod < startDateToPeriod){
+        startToPeriod = startDateToPeriod;
+      }
+      //Difference between startDate and booking start times width to time ratio
+      var _left = (startToPeriod - startDateToPeriod) * widthToPeriod;
+      
+      //CALCULATE WIDTH
+      //If off timeline, start at startDate
+      if(endToPeriod > endDateToPeriod){
+        endToPeriod = endDateToPeriod;
+      }
+      //Difference between end and start times width to time ratio plus offset
+      var _width = ((endToPeriod - startToPeriod) * widthToPeriod) + offset;
+      
+    }
+
+    let style: Object;		
+    style = {'margin-left.px': _left, 'width.px': _width};
+    if(dataType !== null)
+      style = {'margin-left.px': _left, 'width.px': _width, 'background-color': dataType.mainColor, 'border-color': dataType.secondColor};
+  return style;
 	}
 
 	//Returns the position of frames for the periods display

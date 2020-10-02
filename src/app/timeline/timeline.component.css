@@ -47,6 +47,7 @@ a {
 	border: 1px solid #bfbfbf;
 	border-top:none;
 	height:30px;
+	z-index:100;
 }
 
 .tl-item{
@@ -183,7 +184,7 @@ a {
 	margin-left: 0px;
 }
 
-.tl-graph-data{
+.tl-bar{
 	margin: 5px 0px 7px 0px;
 	height: 17px;
 	position: absolute;
@@ -191,9 +192,10 @@ a {
 	overflow-x:hidden;
     overflow-y:hidden;
     white-space: nowrap;
+    z-index: 101;
 }
 
-.tl-graph-time{
+.tl-bar-time{
 	display:inline-block;
 	height:21px;
 	font-size:12px;

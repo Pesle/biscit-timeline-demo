@@ -2,44 +2,44 @@
 <div *ngIf="categoryTree==undefined">
   No DataSource
 </div>
-<div *ngIf="categoryTree!==undefined">
+<div [hidden]="categoryTree==undefined">
 
-	<div class="tl">
-	  <!-- CREATE LIST -->
-	  <div class="tl-left">
-		  <div class="tl-top"><ng-container *ngTemplateOutlet="displayScale"></ng-container></div>
-		  
-		  <!-- Start Recursing Sub Categories -->
-		  <ng-container *ngTemplateOutlet="recursiveListTemplate; context:{ list: categoryTree.subCategories, tab: 0 }"></ng-container>
-		  
-		  <!-- Display Equipment -->
-		  <ng-container *ngIf="categoryTree.items!==undefined">
-			<ng-container *ngTemplateOutlet="displayItems; context:{ list: categoryTree.items, tab: 1 }"></ng-container>
-		  </ng-container>
-		  
-		  <div class="tl-bottom"></div>
-	  </div>
-	  
-	  <!-- CREATE TIMELINE -->
-	  <div class="tl-right">
-	  	<div #tlTimeframe id="tlTimeframe" class="tl-timeframe">
-		  	<div class="tl-top" *ngIf="tlTimeframe !== undefined"><ng-container *ngTemplateOutlet="displayPeriods"></ng-container></div>
-		  	
-		  	<!-- Start Recursing Sub Categories -->
-			<ng-container *ngTemplateOutlet="recursiveTimelineTemplate; context:{ list: categoryTree.subCategories}"></ng-container>
-		  	
-		  	<ng-container *ngIf="categoryTree.items!==undefined">
-				<ng-container *ngTemplateOutlet="displayTimelineItems; context:{ list: categoryTree.items}"></ng-container>
-		  	</ng-container>
-		  	
-		  	<div class="tl-bottom">
-		  		<span class="tl-back" (click)="changeStartDateOne(false)">{{faChevronLeft}}</span>
-		  		<ng-container *ngTemplateOutlet="displayPeriods"></ng-container>
-		  		<span class="tl-next" (click)="changeStartDateOne(true)">{{faChevronRight}}</span>
-		  	</div>
-		  </div>
-		</div>
-	</div>
+  <div class="tl">
+    <!-- CREATE LIST -->
+    <div class="tl-left">
+      <div class="tl-top"><ng-container *ngTemplateOutlet="displayScale"></ng-container></div>
+      
+      <!-- Start Recursing Sub Categories -->
+      <ng-container *ngTemplateOutlet="recursiveListTemplate; context:{ list: categoryTree.subCategories, tab: 0 }"></ng-container>
+      
+      <!-- Display Equipment -->
+      <ng-container *ngIf="categoryTree.items!==undefined">
+        <ng-container *ngTemplateOutlet="displayItems; context:{ list: categoryTree.items, tab: 1 }"></ng-container>
+      </ng-container>
+      
+      <div class="tl-bottom"></div>
+    </div>
+    
+    <!-- CREATE TIMELINE -->
+    <div class="tl-right">
+      <div #tlTimeframe id="tlTimeframe" class="tl-timeframe">
+        <div class="tl-top" *ngIf="tlTimeframe !== undefined"><ng-container *ngTemplateOutlet="displayPeriods"></ng-container></div>
+        
+        <!-- Start Recursing Sub Categories -->
+      <ng-container *ngTemplateOutlet="recursiveTimelineTemplate; context:{ list: categoryTree.subCategories}"></ng-container>
+        
+        <ng-container *ngIf="categoryTree.items!==undefined">
+        <ng-container *ngTemplateOutlet="displayTimelineItems; context:{ list: categoryTree.items}"></ng-container>
+        </ng-container>
+        
+        <div class="tl-bottom">
+          <span class="tl-back" (click)="changeStartDateOne(false)">{{faChevronLeft}}</span>
+          <ng-container *ngTemplateOutlet="displayPeriods"></ng-container>
+          <span class="tl-next" (click)="changeStartDateOne(true)">{{faChevronRight}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- LIST TEMPLATES -->
@@ -100,9 +100,9 @@
 <!-- Display Sub Category - Recursive -->
 <ng-template #recursiveTimelineTemplate let-list="list">
   <ng-container *ngFor="let cat of list">
-  	<div class="tl-line" on-click="categoryBarClicked(cat, $event)">
-		
-	</div>
+  	<div #elem [attr.id]="'tl-'+cat.categoryId"  class="tl-line" on-click="categoryBarClicked(cat, $event)">
+		  <ng-container *ngTemplateOutlet="displayBars; context:{ list: cat.data }"></ng-container>
+	  </div>
 	
  	<!-- If category is meant to be displayed -->
 	<ng-container *ngIf="isDisplayed(cat.categoryId)">
@@ -123,27 +123,32 @@
 	<ng-container *ngIf="list.length > 0">
 	  <ng-container *ngFor="let item of list; last as isLast">
         <div #elem [attr.id]="'tl-'+item.itemsId" class="tl-line" on-click="itemBarClicked(item, $event)" [ngClass]="{'tl-categoryDivide': isLast, 'tl-itemDisabled': item.disabled}" >
-			<ng-container *ngFor="let curData of item.data">
-				<ng-container *ngIf="checkDates(curData.startTime, curData.endTime)">
-					<span class="tl-graph-data" (click)="BarClicked.emit(curData)" [ngStyle]="getGraphStyle(curData.startTime, curData.endTime, curData.type, -6)">
-						<ng-container *ngIf="curData.startTime.getTime() < startDate.getTime(); else StartInFrame">
-							<span class="tl-graph-time" style="float:left;">< {{curData.startTime | date: 'd LLL, hh:mm a'}}</span>
-						</ng-container>
-						<ng-template #StartInFrame>
-							<span class="tl-graph-time" style="float:left;">{{curData.startTime | date: 'hh:mm a'}}</span>
-						</ng-template>
-						<ng-container *ngIf="curData.endTime.getTime() > endDate().getTime(); else EndInFrame">
-							<span class="tl-graph-time" style="float:right;">{{curData.endTime | date: 'd LLL, hh:mm a'}} ></span>
-						</ng-container>
-						<ng-template #EndInFrame>
-							<span class="tl-graph-time" style="float:right;">{{curData.endTime | date: 'hh:mm a'}}</span>
-						</ng-template>
-					</span>
-				</ng-container>
-      		</ng-container>		
-		</div>
-	  </ng-container>
+			    <ng-container *ngTemplateOutlet="displayBars; context:{ list: item.data}"></ng-container>
+		    </div>
+	    </ng-container>
     </ng-container>
+</ng-template>
+
+
+<ng-template #displayBars let-list="list">
+	<ng-container *ngFor="let curData of list">
+		<ng-container *ngIf="checkDates(curData.startTime, curData.endTime)">
+			<span class="tl-bar" (click)="$event.stopPropagation(); BarClicked.emit(curData)" [ngStyle]="getGraphStyle(curData.startTime, curData.endTime, curData.type, -6)">
+				<ng-container *ngIf="curData.startTime.getTime() < startDate.getTime(); else StartInFrame">
+					<span class="tl-bar-time" style="float:left;">< {{curData.startTime | date: 'd LLL, hh:mm a'}}</span>
+				</ng-container>
+				<ng-template #StartInFrame>
+					<span class="tl-bar-time" style="float:left;">{{curData.startTime | date: 'hh:mm a'}}</span>
+				</ng-template>
+				<ng-container *ngIf="curData.endTime.getTime() > endDate().getTime(); else EndInFrame">
+					<span class="tl-bar-time" style="float:right;">{{curData.endTime | date: 'd LLL, hh:mm a'}} ></span>
+				</ng-container>
+				<ng-template #EndInFrame>
+					<span class="tl-bar-time" style="float:right;">{{curData.endTime | date: 'hh:mm a'}}</span>
+				</ng-template>
+			</span>
+		</ng-container>
+	</ng-container>	
 </ng-template>
 
 <!-- TIME INDICATORS -->

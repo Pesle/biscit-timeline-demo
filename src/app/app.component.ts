@@ -42,13 +42,13 @@ export class AppComponent  {
             disabled: false,
             available: true
           },{
-            name: "BoardRoom",
+            name: "Board Room",
             itemId: "2",
             data: this.randomData(5, "2", ""),
             disabled: false,
             available: true
           }],
-          data: this.randomData(1, "", "1"),
+          data: this.randomData(10, "", "1"),
           displayed: false
         },{
           name: "Equipment",
