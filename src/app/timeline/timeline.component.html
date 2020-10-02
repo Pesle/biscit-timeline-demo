@@ -2,7 +2,7 @@
 <div *ngIf="categoryTree==undefined">
   No DataSource
 </div>
-<div [hidden]="categoryTree==undefined">
+<div *ngIf="!ready | async">
 
   <div class="tl">
     <!-- CREATE LIST -->
