@@ -1,8 +1,4 @@
-<app-timeline
-    [(startDate)] = "startDate"
-    [period] = "5"
-    [scale] = "scale"
-    [dataSource] = "categoryTree"
-    (BarClicked) = "messageBox($event.startTime+'\nTO\n'+$event.endTime+'\n \nData Type: '+$event.type.name+'\nData ID: '+$event.dataId)"
-    (EmptyBarClicked)="messageBox('Time Clicked:\n'+$event.startTime)">
-</app-timeline>
+<timeline [(startDate)]="startDate" [period]="5" [scale]="scale" [dataSource]="categoryTree"
+	(BarClicked)="messageBox($event.startTime+'\nTO\n'+$event.endTime+'\n \nData Type: '+$event.type.name+'\nData ID: '+$event.dataId)"
+	(EmptyBarClicked)="messageBox('Time Clicked:\n'+$event.startTime)">
+</timeline>

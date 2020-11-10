@@ -4,71 +4,32 @@ a {
 	color: #4d4d4d;
 }
 
-.fa-icon {
-	font-size:8px;
-}
-
 /* General Timeline Styles */
 
 .tl{
-	width:auto;
+	position: relative;
+}
+
+.tl-container{ /* (container) */
+	width:100%;
 	min-width:440px;
 	display: flex;
     align-items: flex-start;
 }
 
-.tl-top{
+.tl-top{ /* (top row) */
 	height:48px;
 	border: 1px solid #bfbfbf;
 	position: relative;
 }
-
-.tl-bottom{
+.tl-bottom{ /* (bottom row) */
 	height:48px;
 	border: 1px solid #bfbfbf;
 	border-top: none;
 	position: relative;
 }
 
-.tl-category {
-	display:block !important;
-	background-color: #fafafa;
-	cursor: pointer;
-	border: 1px solid #bfbfbf;
-	border-top:none;
-	padding:3px;
-	height:24px;
-}
-
-.tl-line {
-	display:block !important;
-	background-color: #fafafa;
-	cursor: pointer;
-	border: 1px solid #bfbfbf;
-	border-top:none;
-	height:30px;
-	z-index:100;
-}
-
-.tl-item{
-	background-color: #fff;
-	border: 1px solid #bfbfbf;
-	border-top:none;
-	padding:3px;
-	height:24px;
-}
-
-.tl-itemDisabled{
-	background-color: #CCC;
-}
-
-.tl-categoryDivide{
-	border-bottom:2px solid #bfbfbf;
-}
-
-/* List Styles */
-
-.tl-left {
+.tl-left { /* (left column) */
 	display:block-inline;
 	text-align: left;
 	min-width:220px;
@@ -76,42 +37,7 @@ a {
 	width:auto;
 	position: relative;
 }
-
-.tl-category label {
-	font-weight:bold;
-	margin:auto 0px auto 5px;
-	font-size:12px;
-	font-family: Roboto;
-	cursor: pointer;
-}
-
-.tl-item label{
-	margin:auto 0px auto 13px;
-	font-size:12px;
-	font-family: Roboto;
-}
-
-.tl-tab{
-	font-weight: normal;
-	opacity: 0.2;
-}
-
-.tl-categoryCount{
-	text-align: center;
-	font-size:13px;
-	float:right;
-	margin-top:1px;
-	margin-right:10px;
-	width:28px;
-	padding:2px;
-	color:#fff;
-	background-color:var(--secondary-color);
-	border-radius: 10px;
-}
-
-/* Timeline Styles */
-
-.tl-right {
+.tl-right { /* (right column) */
 	display:inline-block;
 	text-align: left;
 	min-width:220px;
@@ -119,6 +45,98 @@ a {
 	width:auto;
 	flex: 1;
 }
+
+.tl-root{ /* (root category container) */
+	transition: background-color 0.2s;
+}
+.tl-root:hover{
+	background-color:#efefef;
+	border-bottom: 1px #4d4d4d solid;
+	border-top: 1px #4d4d4d solid;
+	margin: -1px 0px -1px 0px;
+}
+
+.tl-timeframe { /* (right side container) */
+	position: relative;
+}
+
+/* EMPTY LINE (right side rows) */
+
+.tl-line {
+	display:block !important;
+	cursor: pointer;
+	border: 1px solid #bfbfbf;
+	border-top:none;
+	height:30px;
+	z-index:100;
+	transition: background-color 0.2s;
+}
+
+/* CATEGORY LINE (left side rows) */
+
+.tl-category {
+	display:flex !important;
+	cursor: pointer;
+	border: 1px solid #bfbfbf;
+	border-top:none;
+	padding:3px;
+	align-items:center;
+	height:24px;
+	transition: background-color 0.2s;
+}
+.tl-category label {
+	display: inline-block;
+	vertical-align: middle;
+	font-weight:bold;
+	margin:auto 0px auto 5px;
+	font-size:12px;
+	font-family: Roboto;
+	margin-right:50px;
+	cursor: pointer;
+}
+.tl-categoryDivide{
+	border-bottom:2px solid #bfbfbf;
+}
+.tl-expand{
+	font-size:16px !important;
+}
+.tl-tab{
+	font-weight: normal;
+	opacity: 0.3;
+}
+.tl-categoryCount{
+	position: absolute;
+	text-align: center;
+	font-size:13px;
+	right:10px;
+	margin-top:1px;
+	width:28px;
+	padding:2px;
+	color:#fff;
+	background-color:var(--secondary-color);
+	border-radius: 10px;
+}
+
+/* ITEM LINE (left side rows) */
+
+.tl-item{
+	background-color: #fff;
+	border: 1px solid #bfbfbf;
+	border-top:none;
+	padding:3px;
+	height:24px;
+	transition: background-color 0.2s;
+}
+.tl-item label{
+	margin:auto 0px auto 13px;
+	font-size:12px;
+	font-family: Roboto;
+}
+.tl-itemDisabled{
+	background-color: #CCC;
+}
+
+/* SCALE DISPLAY (top left) */
 
 .tl-scale{
 	display:inline-block;
@@ -128,61 +146,69 @@ a {
 	padding:12px 0px;
 }
 
-.tl-scale span:first-child{
+/* Change by Period Buttons */
+.tl-scale span{
 	position: absolute;
-  left:10px;
 	font-size: 20px;
 	cursor: pointer;
+	transition: font-weight 0.2s;
+}
+.tl-scale span:first-child{
+	left:10px; /* Position button to left */
+}
+.tl-scale span:last-child{
+  	right:10px; /* Position button to right */
+}
+.tl-scale span:hover{
+	font-weight: bold;
 }
 
-.tl-scale span:last-child{
-	position: absolute;
-  right:10px;
-	font-size: 20px;
-	cursor: pointer;
-}
+/* PERIOD DISPLAY (top and bottom rows of right side)*/
 
 .tl-period{
 	position: absolute;
 	display:inline-grid;
-	text-align: center;
+	text-align: left;
+	padding-left:2px;
 	border-left: 1px solid #ccc;
 	margin-left: -1px;
 	margin-top: 5px;
 	font-size: 15px;
 	min-width: 80px;
+	overflow-x: visible;
 }
 
 .tl-top .tl-period{
-	bottom:0px;
+	bottom:0px; /* Position dates on bottom */
 }
-
 .tl-bottom .tl-period{
-	top:0px;
+	top:0px; /* Position dates on top */
 }
-
 .tl-bottom .tl-period-1{
-	display: none;
+	display: none; /* Hide AM/PM, Month, Year */
 }
 
-.tl-period-1{
-	position: abosolute;
+.tl-period-1{ /* AM/PM, Month, Year on top bar */
+	position: absolute;
+	top:-22px;
 	float: left;
 	padding-left: 5px;
 	text-align: left;
 	font-size: 17px;
 	font-weight: bold;
+	z-index:101;
 }
 
 .tl-periods .tl-period-m:not(:first-child){
 	border-left: 3px solid #ccc;
 	margin-left: -3px;
 }
-
 .tl-periods .tl-period:first-child{
 	border-left: 0px;
 	margin-left: 0px;
 }
+
+/* DATA BAR (bars used in lines on right side)*/
 
 .tl-bar{
 	margin: 5px 0px 7px 0px;
@@ -192,29 +218,139 @@ a {
 	overflow-x:hidden;
     overflow-y:hidden;
     white-space: nowrap;
-    z-index: 101;
+	z-index: 101;
+	border-left: none;
+	border-right: none;
+	transition: box-shadow 0.2s;
+	box-shadow: inset 0px -8px 0px 0px rgba(0,0,0,.05);
 }
-
+.tl-bar:active{
+	cursor: ns-resize;
+	box-shadow: inset 0px -8px 0px 0px rgba(0,0,0,.1), 0 2px 2px rgba(0,0,0,.24), 0 0 2px rgba(0,0,0,.12);
+}
+.tl-bar:hover{
+	box-shadow: inset 0px -8px 0px 0px rgba(0,0,0,.1), 0 2px 2px rgba(0,0,0,.24), 0 0 2px rgba(0,0,0,.12);
+}
 .tl-bar-time{
 	display:inline-block;
 	height:21px;
 	font-size:12px;
-	padding: 2px;
+	padding: 2px 4px;
 	color:#000;
+	z-index:1000;
+}
+.tl-bar-time-overflow{
+	background-color:rgba(200,200,200,.5);
+	transition: background-color 0.2s;
+	padding:2px;
+	border:1px solid #aaa;
+	box-shadow: 0 0 3px rgba(0,0,0,.4);
+}
+.tl-bar-time-overflow:hover{
+	background-color:rgba(200,200,200,.8);
+}
+.tl-bar-time-overflow:active{
+	background-color:rgba(200,200,200,1);
+	box-shadow: 0 3px 3px rgba(0,0,0,.24), 0 0 3px rgba(0,0,0,.12);
 }
 
+/* Resize triggers on edges of data bars */
+.tl-bar-resize{
+	position: absolute;
+	height:100%;
+	width:7px;
+	cursor: ew-resize;
+}
+.tl-bar-resize#resize1:hover, .tl-bar-resize#resize1:active{
+	border-left: solid;
+}
+.tl-bar-resize#resize2:hover, .tl-bar-resize#resize2:active{
+	border-right: solid;
+}
+.tl-bar-resize#resize1{
+	position: absolute;
+	border-left: #000 3px double;
+	left:0px;
+}
+.tl-bar-resize#resize2{
+	position: absolute;
+	border-right: #000 3px double;
+	right:0px;
+}
+
+/* Resize modal (appears when resizing bar */
+.tl-modal{
+	box-shadow: 0 2px 2px rgba(0,0,0,.24), 0 0 2px rgba(0,0,0,.12);
+	border: #e2e2e2 solid 1px;
+	border-radius: 10px;
+	position: fixed;
+	font-size:12px;
+	text-align: center;
+	margin-top: -60px;
+	margin-left: -40px;
+	background-color: #fff;
+	padding: 7px;
+	opacity : 0; 
+	transition:opacity 0.2s;
+	z-index: 1010;
+}
+
+/* CURRENT TIME BAR */
+
+.tl-curTime {
+	content: "";
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	bottom: 0;
+	left: 50%;
+	border-left: 0.5px dashed #4400ff;
+	opacity:0.5;
+}
+
+/* NEXT AND PREVIOUS DAY BUTTONS */
 .tl-next{
 	position: absolute;
 	right:10px;
 	top: 22px;
 	font-size: 20px;
 	cursor: pointer;
+	transition: font-weight 0.2s;
 }
-
 .tl-back{
 	position: absolute;
 	left:10px;
 	top: 22px;
 	font-size: 20px;
 	cursor: pointer;
+	transition: font-weight 0.2s;
+}
+.tl-next:hover, .tl-back:hover{
+	font-weight: bold;
+}
+
+.tl-bottom-info{
+	display: block;
+	text-align: center;
+	position: absolute;
+	top: 22px;
+	left:50%;
+	margin: 0 auto;
+	transform: translate(-50%, 0);
+}
+
+#tl-limiter{
+	vertical-align: middle;
+    float:right;
+    font-size: 10px;
+    width: 200px;
+    border: 1px solid #bfbfbf;
+    border-top: none;
+}
+.tl-paginator-icon{
+	padding:5px 7px;
+}
+.tl-limiter-info{
+	font-size:12px;
+	margin:5px 7px;
 }

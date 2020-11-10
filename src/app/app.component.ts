@@ -1,28 +1,35 @@
-import {Component} from '@angular/core';
+import { Component } from "@angular/core";
 
-import { TlCategory, TlData, TlItem, TlDataType, TlScale } from './timeline/timeline.component';
+import {
+  TlCategory,
+  TlData,
+  TlItem,
+  TlDataType,
+  TlScale
+} from "./timeline/timeline.component";
 
 @Component({
-  selector: 'my-app',
-  templateUrl: './app.component.html',
-  styleUrls: [ './app.component.css' ]
+  selector: "my-app",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"]
 })
-export class AppComponent  {
+export class AppComponent {
   dataIdInc: number = 0;
-  public startDate: Date;
+
+  public startDate: Date = new Date();
   public scale: TlScale;
 
   public categoryTree: TlCategory;
 
   dataTypes: Array<TlDataType>;
 
-  constructor(){
+  constructor() {
     this.startDate = new Date();
     this.scale = TlScale.Days;
 
     this.dataTypes = [
-      {name: "Reservation", mainColor: '#090', secondColor: '#070'},
-      {name: "Expression Of Interest", mainColor: '#099', secondColor: '#077'}
+      { name: "Reservation", mainColor: "#090", secondColor: "#070" },
+      { name: "Expression Of Interest", mainColor: "#099", secondColor: "#077" }
     ];
 
     this.categoryTree = {
@@ -35,33 +42,39 @@ export class AppComponent  {
           categoryId: "1",
           subCategoryCount: 0,
           subCategories: [],
-          items: [{
-            name: "Lounge Room",
-            itemId: "1",
-            data: this.randomData(5, "1", ""),
-            disabled: false,
-            available: true
-          },{
-            name: "Board Room",
-            itemId: "2",
-            data: this.randomData(5, "2", ""),
-            disabled: false,
-            available: true
-          }],
+          items: [
+            {
+              name: "Lounge Room",
+              itemId: "1",
+              data: this.randomData(5, "1", ""),
+              disabled: false,
+              available: true
+            },
+            {
+              name: "Board Room",
+              itemId: "2",
+              data: this.randomData(5, "2", ""),
+              disabled: false,
+              available: true
+            }
+          ],
           data: this.randomData(10, "", "1"),
           displayed: false
-        },{
+        },
+        {
           name: "Equipment",
           categoryId: "2",
           subCategoryCount: 0,
           subCategories: [],
-          items: [{
-            name: "Whiteboard",
-            itemId: "3",
-            data: this.randomData(5, "3", ""),
-            disabled: false,
-            available: true
-          }],
+          items: [
+            {
+              name: "Whiteboard",
+              itemId: "3",
+              data: this.randomData(5, "3", ""),
+              disabled: false,
+              available: true
+            }
+          ],
           data: [],
           displayed: false
         }
@@ -69,30 +82,34 @@ export class AppComponent  {
       items: [],
       data: [],
       displayed: true
-    }
+    };
   }
 
-  messageBox(str: string){
+  messageBox(str: string) {
     alert(str);
   }
 
-  randomData(events: number, itemId: string, categoryId: string): TlData[]{
+  randomData(events: number, itemId: string, categoryId: string): TlData[] {
     var dataArray: Array<TlData> = [];
     //Start random data dates at 72 hours before startDate
-    var nextDate: Date = new Date(this.startDate.getTime() - 72 * 60 * 60 * 1000);
-    for(var i = 0; i < events; i++){
-      nextDate.setHours(nextDate.getHours() + Math.round(nextDate.getMinutes()/60)+1);
+    var nextDate: Date = new Date(
+      this.startDate.getTime() - 72 * 60 * 60 * 1000
+    );
+    for (var i = 0; i < events; i++) {
+      nextDate.setHours(
+        nextDate.getHours() + Math.round(nextDate.getMinutes() / 60) + 1
+      );
       nextDate.setMinutes(0, 0, 0);
-		
+
       var dates = this.randomDates(nextDate);
       var data: TlData = {
         startTime: dates[0],
         endTime: dates[1],
-        dataId: this.dataIdInc+"",
+        dataId: this.dataIdInc + "",
         categoryId: categoryId,
         itemId: itemId,
         type: this.randomDataType()
-      }
+      };
       //Update nextDate to previous finish date
       nextDate = dates[1];
       this.dataIdInc++;
@@ -101,26 +118,25 @@ export class AppComponent  {
     return dataArray;
   }
 
-  randomDataType(): TlDataType{
-    if(this.randomNumber(10) > 5)
-      return this.dataTypes[1];
+  randomDataType(): TlDataType {
+    if (this.randomNumber(10) > 5) return this.dataTypes[1];
     return this.dataTypes[0];
   }
 
-  randomDates(previousDate: Date): Date[]{
+  randomDates(previousDate: Date): Date[] {
     //Generate random hours
     var time1 = this.randomNumber(72);
-    var time2 = this.randomNumber(80)+12;
+    var time2 = this.randomNumber(80) + 12;
 
     var dates: Array<Date> = [];
     //Add random hours to previous date
-    dates.push(new Date(previousDate.getTime()+time1*60*60*1000));
+    dates.push(new Date(previousDate.getTime() + time1 * 60 * 60 * 1000));
     //Add random hours to start date
-    dates.push(new Date(dates[0].getTime()+time2*60*60*1000));
+    dates.push(new Date(dates[0].getTime() + time2 * 60 * 60 * 1000));
     return dates;
   }
 
-  randomNumber(max): number{
+  randomNumber(max): number {
     return Math.floor(Math.random() * Math.floor(max));
   }
 }
